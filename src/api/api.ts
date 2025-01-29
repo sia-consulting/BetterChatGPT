@@ -60,7 +60,7 @@ export const getChatCompletionStream = async (
     ...customHeaders,
   };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
-
+  console.log('apiKey', apiKey);
   if (isAzureEndpoint(endpoint) && apiKey) {
     headers['api-key'] = apiKey;
 

@@ -22,7 +22,7 @@ const ApiMenu = ({
   const apiEndpoint = useStore((state) => state.apiEndpoint);
   const setApiEndpoint = useStore((state) => state.setApiEndpoint);
 
-  const [_apiKey, _setApiKey] = useState<string>(apiKey || '');
+  const [_apiKey, _setApiKey] = useState<string>(apiKey || import.meta.env.VITE_OPENAI_API_KEY);
   const [_apiEndpoint, _setApiEndpoint] = useState<string>(apiEndpoint);
   const [_customEndpoint, _setCustomEndpoint] = useState<boolean>(
     !availableEndpoints.includes(apiEndpoint)

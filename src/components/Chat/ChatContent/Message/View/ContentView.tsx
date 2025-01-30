@@ -51,6 +51,7 @@ const ContentView = memo(
 
     const currentChatIndex = useStore((state) => state.currentChatIndex);
     const setChats = useStore((state) => state.setChats);
+    const advancedMode = useStore((state) => state.advancedMode);
     const lastMessageIndex = useStore((state) =>
       state.chats ? state.chats[state.currentChatIndex].messages.length - 1 : 0
     );
@@ -147,11 +148,14 @@ const ContentView = memo(
               {messageIndex !== lastMessageIndex && (
                 <DownButton onClick={handleMoveDown} />
               )}
-
-              <MarkdownModeButton />
-              <CopyButton onClick={handleCopy} />
-              <EditButton setIsEdit={setIsEdit} />
-              <DeleteButton setIsDelete={setIsDelete} />
+              {advancedMode ? (
+                <>
+                  <MarkdownModeButton />
+                  <CopyButton onClick={handleCopy} />
+                  <EditButton setIsEdit={setIsEdit} />
+                  <DeleteButton setIsDelete={setIsDelete} />
+                </>
+              ) : <></>}
             </>
           )}
           {isDelete && (

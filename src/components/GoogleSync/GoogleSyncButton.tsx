@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGoogleLogin, googleLogout } from '@react-oauth/google';
-import useGStore from '@store/cloud-auth-store';
+import useGStore from '@store/google-cloud-auth-store';
 import useStore from '@store/store';
 import { createJSONStorage } from 'zustand/middleware';
 

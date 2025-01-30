@@ -1,7 +1,7 @@
 import { SyncStatus } from '@type/google-api';
-import { StoreSlice } from './cloud-auth-store';
+import { StoreSlice } from './google-cloud-auth-store';
 
-export interface CloudAuthSlice {
+export interface GoogleCloudAuthSlice {
   googleAccessToken?: string;
   googleRefreshToken?: string;
   cloudSync: boolean;
@@ -14,35 +14,35 @@ export interface CloudAuthSlice {
   setSyncStatus: (syncStatus: SyncStatus) => void;
 }
 
-export const createCloudAuthSlice: StoreSlice<CloudAuthSlice> = (set, get) => ({
+export const createGoogleCloudAuthSlice: StoreSlice<GoogleCloudAuthSlice> = (set, get) => ({
   cloudSync: false,
   syncStatus: 'unauthenticated',
   setGoogleAccessToken: (googleAccessToken?: string) => {
-    set((prev: CloudAuthSlice) => ({
+    set((prev: GoogleCloudAuthSlice) => ({
       ...prev,
       googleAccessToken: googleAccessToken,
     }));
   },
   setGoogleRefreshToken: (googleRefreshToken?: string) => {
-    set((prev: CloudAuthSlice) => ({
+    set((prev: GoogleCloudAuthSlice) => ({
       ...prev,
       googleRefreshToken: googleRefreshToken,
     }));
   },
   setFileId: (fileId?: string) => {
-    set((prev: CloudAuthSlice) => ({
+    set((prev: GoogleCloudAuthSlice) => ({
       ...prev,
       fileId: fileId,
     }));
   },
   setCloudSync: (cloudSync: boolean) => {
-    set((prev: CloudAuthSlice) => ({
+    set((prev: GoogleCloudAuthSlice) => ({
       ...prev,
       cloudSync: cloudSync,
     }));
   },
   setSyncStatus: (syncStatus: SyncStatus) => {
-    set((prev: CloudAuthSlice) => ({
+    set((prev: GoogleCloudAuthSlice) => ({
       ...prev,
       syncStatus: syncStatus,
     }));

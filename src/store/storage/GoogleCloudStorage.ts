@@ -1,5 +1,5 @@
 import { PersistStorage, StorageValue, StateStorage } from 'zustand/middleware';
-import useCloudAuthStore from '@store/cloud-auth-store';
+import useGoogleCloudAuthStore from '@store/google-cloud-auth-store';
 import useStore from '@store/store';
 import {
   deleteDriveFile,
@@ -9,8 +9,8 @@ import {
 } from '@api/google-api';
 
 const createGoogleCloudStorage = <S>(): PersistStorage<S> | undefined => {
-  const accessToken = useCloudAuthStore.getState().googleAccessToken;
-  const fileId = useCloudAuthStore.getState().fileId;
+  const accessToken = useGoogleCloudAuthStore.getState().googleAccessToken;
+  const fileId = useGoogleCloudAuthStore.getState().fileId;
   if (!accessToken || !fileId) return;
 
   try {
@@ -22,17 +22,17 @@ const createGoogleCloudStorage = <S>(): PersistStorage<S> | undefined => {
   }
   const persistStorage: PersistStorage<S> = {
     getItem: async (name) => {
-      useCloudAuthStore.getState().setSyncStatus('syncing');
+      useGoogleCloudAuthStore.getState().setSyncStatus('syncing');
       try {
-        const accessToken = useCloudAuthStore.getState().googleAccessToken;
-        const fileId = useCloudAuthStore.getState().fileId;
+        const accessToken = useGoogleCloudAuthStore.getState().googleAccessToken;
+        const fileId = useGoogleCloudAuthStore.getState().fileId;
         if (!accessToken || !fileId) return null;
 
         const data: StorageValue<S> = await getDriveFile(fileId, accessToken);
-        useCloudAuthStore.getState().setSyncStatus('synced');
+        useGoogleCloudAuthStore.getState().setSyncStatus('synced');
         return data;
       } catch (e: unknown) {
-        useCloudAuthStore.getState().setSyncStatus('unauthenticated');
+        useGoogleCloudAuthStore.getState().setSyncStatus('unauthenticated');
         useStore.getState().setToastMessage((e as Error).message);
         useStore.getState().setToastShow(true);
         useStore.getState().setToastStatus('error');
@@ -40,8 +40,8 @@ const createGoogleCloudStorage = <S>(): PersistStorage<S> | undefined => {
       }
     },
     setItem: async (name, newValue): Promise<void> => {
-      const accessToken = useCloudAuthStore.getState().googleAccessToken;
-      const fileId = useCloudAuthStore.getState().fileId;
+      const accessToken = useGoogleCloudAuthStore.getState().googleAccessToken;
+      const fileId = useGoogleCloudAuthStore.getState().fileId;
       if (!accessToken || !fileId) return;
 
       const blob = new Blob([JSON.stringify(newValue)], {
@@ -51,16 +51,16 @@ const createGoogleCloudStorage = <S>(): PersistStorage<S> | undefined => {
         type: 'application/json',
       });
 
-      if (useCloudAuthStore.getState().syncStatus !== 'unauthenticated') {
-        useCloudAuthStore.getState().setSyncStatus('syncing');
+      if (useGoogleCloudAuthStore.getState().syncStatus !== 'unauthenticated') {
+        useGoogleCloudAuthStore.getState().setSyncStatus('syncing');
 
         await updateDriveFileDebounced(file, fileId, accessToken);
       }
     },
 
     removeItem: async (name): Promise<void> => {
-      const accessToken = useCloudAuthStore.getState().googleAccessToken;
-      const fileId = useCloudAuthStore.getState().fileId;
+      const accessToken = useGoogleCloudAuthStore.getState().googleAccessToken;
+      const fileId = useGoogleCloudAuthStore.getState().fileId;
       if (!accessToken || !fileId) return;
 
       await deleteDriveFile(accessToken, fileId);

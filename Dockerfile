@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:alpine AS builder
 
 RUN addgroup -S appgroup && \
   adduser -S appuser -G appgroup && \
@@ -15,5 +15,11 @@ RUN yarn install --frozen-lockfile
 COPY --chown=appuser:appgroup . .
 RUN yarn build
 
-EXPOSE 3000
-CMD ["/home/appuser/.yarn/bin/serve", "-s", "dist", "-l", "3000"]
+
+# Stage 2: Serve app with nginx
+FROM nginx:latest
+COPY --from=builder /home/appuser/app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
